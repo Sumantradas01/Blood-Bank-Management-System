@@ -59,7 +59,7 @@ def donor_login():
         user = cursor.fetchone()
 
         if user:
-            return render_template("dashboard.html")
+            return render_template("admin_dashboard.html")
         else:
             flash("Invalid email or password!")
             return redirect(url_for("donor_login"))
@@ -139,6 +139,25 @@ def hospital_login():
 @app.route("/dashboard")
 def dashboard():
     return render_template("dashboard.html")
+
+@app.route("/admin/dashboard")
+def admin_dashboard():
+    return render_template(
+        "admin_dashboard.html",
+        total_units=1500,
+        pending_requests=15,
+        expiry_soon=25,
+        total_donors=2500,
+        activities=[
+            {"time": "2 min ago", "activity": "New Blood Request",
+             "details": "Hospital A: O+ 2 units (Emergency)",
+             "status": "Urgent", "status_class": "status-urgent"},
+            {"time": "15 min ago", "activity": "Blood Unit Added",
+             "details": "Donor ID D-9876, Blood Group B-",
+             "status": "Processed", "status_class": "status-approved"},
+        ]
+    )
+
 
 
 # ------------------------------------
