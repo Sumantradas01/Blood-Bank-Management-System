@@ -10,6 +10,23 @@ body {
     text-align: center;
 }
 
+/* Header */
+header {
+    background: #b30000;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header nav a {
+    color: white;
+    margin-left: 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 .box {
     background: white;
     margin: 20px auto;
