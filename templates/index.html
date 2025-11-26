@@ -38,28 +38,26 @@
     </section>
 
     <!-- SERVICES SECTION -->
-    <section class="services">
-        <h2>What We Offer</h2>
+<section class="services">
+    <h2>What We Offer</h2>
 
-        <div class="cards">
+    <div class="service-buttons">
 
-            <div class="card">
-                <h3>Register as Donor</h3>
-                <p>Join our mission and help save lives by donating blood.</p>
-            </div>
+        <a href="{{ url_for('donor_register') }}" class="service-btn">
+            Register as Donor
+        </a>
 
-            <div class="card">
-                <h3>Find Blood Quickly</h3>
-                <p>Search for available blood groups easily and instantly.</p>
-            </div>
+        <a href="{{ url_for('search_blood') }}" class="service-btn">
+            Find Blood Quickly
+        </a>
 
-            <div class="card">
-                <h3>Hospital Admin Panel</h3>
-                <p>Manage blood stock and donor records with ease.</p>
-            </div>
+        <a href="{{ url_for('hospital_login') }}" class="service-btn">
+            Hospital Admin Panel
+        </a>
 
-        </div>
-    </section>
+    </div>
+</section>
+
 
 </body>
 </html>

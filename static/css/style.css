@@ -41,7 +41,7 @@
 /* HERO SECTION WITH IMAGE */
 .hero {
     height: 75vh;
-    background-image: url("../images/blood1.jpg");
+    background-image: url("../images/blood 2.jpg");
    /* ⭐ PUT YOUR IMAGE HERE */
     background-size: cover;
     background-position: center;
@@ -51,7 +51,7 @@
 }
 
 .hero-overlay {
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.2);
     padding: 50px;
     border-radius: 12px;
     text-align: center;
@@ -59,7 +59,7 @@
 }
 
 .hero h1 {
-    color: white;
+    color: #430404;
     font-size: 48px;
     margin-bottom: 15px;
 }
@@ -132,3 +132,31 @@
 .card p {
     color: #444;
 }
+/* SERVICE BUTTONS */
+.service-buttons {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+.service-btn {
+    padding: 18px 30px;
+    background: #b30000;
+    color: white;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+    width: 260px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.service-btn:hover {
+    background: #ff1a1a;
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+
