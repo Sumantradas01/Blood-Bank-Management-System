@@ -3,57 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hospital Registration - Blood Bank Management System</title>
-    <!-- Bootstrap for alerts -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Hospital Registration</title>
 
-  <!-- Your custom CSS -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/hospital_register.css') }}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hospital_register.css') }}">
 </head>
 <body>
 
-<div class="container">
-    <h1>Hospital Registration</h1>
+    <div class="container">
 
-    <form action="#" method="POST">
-        <div class="form-group">
-            <label>Hospital Name:</label>
-            <input type="text" name="hospital_name" required>
-        </div>
+        <form class="form-box" action="{{ url_for('hospital_register') }}" method="POST">
 
-        <div class="form-group">
-            <label>Hospital Email:</label>
-            <input type="email" name="hospital_email" required>
-        </div>
+            <h2>Hospital Registration</h2>
 
-        <div class="form-group">
-            <label>Phone Number:</label>
-            <input type="text" name="phone" required>
-        </div>
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for msg in messages %}
+                        <div class="alert">{{ msg }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
 
-        <div class="form-group">
-            <label>Address:</label>
-            <textarea name="address" rows="3" required></textarea>
-        </div>
+            <label>Hospital Name</label>
+            <input type="text" name="name" required placeholder="Enter hospital name">
 
-        <div class="form-group">
-            <label>Create Username:</label>
-            <input type="text" name="username" required>
-        </div>
+            <label>Registration Number</label>
+            <input type="text" name="reg_no" required placeholder="Enter registration number">
 
-        <div class="form-group">
-            <label>Create Password:</label>
-            <input type="password" name="password" required>
-        </div>
+            <label>Email</label>
+            <input type="email" name="email" required placeholder="Enter email">
 
-        <button type="submit">Register Hospital</button>
-    </form>
+            <label>Phone Number</label>
+            <input type="text" name="phone" required placeholder="Enter phone number">
 
-    <div class="links">
-        <a href="hospital_login.html">Already Registered? Login</a>
+            <label>Password</label>
+            <input type="password" name="password" required placeholder="Enter password">
+
+            <button type="submit">Register</button>
+
+            <a href="{{ url_for('hospital_login') }}" class="login-link">Already have an account? Login</a>
+        </form>
+
     </div>
-
-</div>
 
 </body>
 </html>
