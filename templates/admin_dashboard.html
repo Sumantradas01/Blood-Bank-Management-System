@@ -1,105 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - BBMS</title>
-
-    <!-- Link to External CSS -->
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
 </head>
 
 <body>
 
-<header>
-    <h1>Blood Bank Management System</h1>
-    <p>Admin & Blood Bank Staff Panel</p>
-</header>
+<h1 class="title">Admin Control Panel</h1>
 
-<nav>
-    <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
-    <a href="{{ url_for('inventory_stock') }}">Blood Inventory</a>
-    <a href="{{ url_for('donor_management') }}">Donor Management</a>
-    <a href="{{ url_for('request_verification') }}">Request Verification</a>
-    <a href="{{ url_for('reports') }}">Reports</a>
-    <a href="{{ url_for('settings') }}">Settings</a>
-    <a href="{{ url_for('admin_logout') }}">Logout</a>
-</nav>
+<!-- BLOOD STOCK SECTION -->
+<section class="box">
+    <h2>Blood Stock Overview</h2>
 
-<div class="container">
+    <table>
+        <tr>
+            <th>Blood Group</th>
+            <th>Units</th>
+            <th>Update</th>
+        </tr>
 
-    <h1>Admin Dashboard</h1>
-    <p>Comprehensive overview and management tools for blood bank operations.</p>
+        {% for stock in blood_stock %}
+        <tr>
+            <td>{{ stock.blood_group }}</td>
+            <td>{{ stock.units }}</td>
+            <td>
+                <form method="POST" action="/update_stock/{{ stock.stock_id }}">
+                    <input type="number" name="units" min="0" required>
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
 
-    <div class="dashboard-grid">
+<!-- HOSPITAL ORDERS -->
+<section class="box">
+    <h2>Hospital Blood Orders</h2>
 
-        <div class="card">
-            <h3>Total Blood Units</h3>
-            <p>{{ total_units }}</p>
-            <a href="{{ url_for('inventory_stock') }}">View Inventory</a>
-        </div>
+    <table>
+        <tr>
+            <th>Hospital</th>
+            <th>Blood Group</th>
+            <th>Units</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
 
-        <div class="card">
-            <h3>Pending Requests</h3>
-            <p>{{ pending_requests }}</p>
-            <a href="{{ url_for('request_verification') }}">Review Requests</a>
-        </div>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.hospital_name }}</td>
+            <td>{{ order.blood_group }}</td>
+            <td>{{ order.units_requested }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+                <a href="/update_order/{{ order.order_id }}/approve">Approve</a> |
+                <a href="/update_order/{{ order.order_id }}/reject">Reject</a> |
+                <a href="/update_order/{{ order.order_id }}/complete">Complete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
 
-        <div class="card">
-            <h3>Upcoming Expiry</h3>
-            <p>{{ expiry_soon }} Units (Next 7 Days)</p>
-            <a href="{{ url_for('inventory_stock') }}">Manage Expiry</a>
-        </div>
+<!-- HOSPITAL REQUIREMENTS -->
+<section class="box">
+    <h2>Hospital Requirements (Blood Requests)</h2>
 
-        <div class="card">
-            <h3>Registered Donors</h3>
-            <p>{{ total_donors }}</p>
-            <a href="{{ url_for('donor_management') }}">Manage Donors</a>
-        </div>
+    <table>
+        <tr>
+            <th>Hospital</th>
+            <th>Patient</th>
+            <th>Blood Group</th>
+            <th>Units</th>
+            <th>Type</th>
+            <th>Status</th>
+        </tr>
 
-    </div>
+        {% for req in requirements %}
+        <tr>
+            <td>{{ req.hospital_name }}</td>
+            <td>{{ req.patient_name }}</td>
+            <td>{{ req.blood_group }}</td>
+            <td>{{ req.units }}</td>
+            <td>{{ req.request_type }}</td>
+            <td>{{ req.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
 
-    <section>
-        <h2>Blood Stock Overview</h2>
-        <div class="chart-placeholder">
-            [Chart Placeholder]
-        </div>
-    </section>
+<!-- DONOR MANAGEMENT -->
+<section class="box">
+    <h2>Donor Management</h2>
 
-    <section>
-        <h2>Recent Activities / Alerts</h2>
-        <div class="table-responsive">
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Blood Group</th>
+            <th>Action</th>
+        </tr>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Time</th>
-                        <th>Activity</th>
-                        <th>Details</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for row in activities %}
-                    <tr>
-                        <td>{{ row.time }}</td>
-                        <td>{{ row.activity }}</td>
-                        <td>{{ row.details }}</td>
-                        <td class="{{ row.status_class }}">{{ row.status }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-
-            </table>
-
-        </div>
-    </section>
-</div>
-
-<footer>
-    <p>© 2025 Blood Bank Management System. All rights reserved.</p>
-</footer>
+        {% for donor in donors %}
+        <tr>
+            <td>{{ donor.name }}</td>
+            <td>{{ donor.email }}</td>
+            <td>{{ donor.blood_group }}</td>
+            <td><a class="delete" href="/delete_donor/{{ donor.donor_id }}">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
 
 </body>
 </html>
