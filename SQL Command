@@ -5,83 +5,92 @@ CREATE DATABASE IF NOT EXISTS bloodbank1;
 USE bloodbank1;
 
 -- --------------------------------------------------
--- TABLE: admin
--- --------------------------------------------------
-CREATE TABLE IF NOT EXISTS admin (
-    admin_id INT AUTO_INCREMENT PRIMARY KEY,
-    admin_name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    phone VARCHAR(20) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    hospital_name VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
-
-
--- --------------------------------------------------
--- TABLE: donors
+-- DONORS TABLE
 -- --------------------------------------------------
 CREATE TABLE IF NOT EXISTS donors (
     donor_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(100) UNIQUE NOT NULL,
     phone VARCHAR(20) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    blood_group VARCHAR(5) NOT NULL,
-    donation_count INT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    blood_group VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
-
 -- --------------------------------------------------
--- TABLE: hospitals
+-- ADMIN TABLE
 -- --------------------------------------------------
-CREATE TABLE IF NOT EXISTS hospitals (
-    hospital_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS admin (
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+    admin_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     hospital_name VARCHAR(100) NOT NULL,
-    location VARCHAR(100) NOT NULL
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
+-- --------------------------------------------------
+-- HOSPITAL TABLE  (Updated as requested)
+-- --------------------------------------------------
+CREATE TABLE IF NOT EXISTS hospital (
+    hospital_id INT AUTO_INCREMENT PRIMARY KEY,
+    hospital_name VARCHAR(150) NOT NULL,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
 
 -- --------------------------------------------------
--- TABLE: blood_stock
+-- BLOOD STOCK TABLE
 -- --------------------------------------------------
 CREATE TABLE IF NOT EXISTS blood_stock (
     stock_id INT AUTO_INCREMENT PRIMARY KEY,
-    blood_group VARCHAR(5) NOT NULL,
-    units INT NOT NULL DEFAULT 0
+    blood_group VARCHAR(10) NOT NULL,
+    units INT NOT NULL,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
-
 -- --------------------------------------------------
--- TABLE: blood_orders (Hospital places order)
+-- BLOOD ORDERS TABLE
 -- --------------------------------------------------
 CREATE TABLE IF NOT EXISTS blood_orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     hospital_id INT NOT NULL,
-    blood_group VARCHAR(5) NOT NULL,
-    units_requested INT NOT NULL,
-    status VARCHAR(20) DEFAULT 'Pending',
+    blood_group VARCHAR(10) NOT NULL,
+    units INT NOT NULL,
     request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('Pending','Approved','Rejected','Completed') DEFAULT 'Pending',
+
     FOREIGN KEY (hospital_id) REFERENCES hospitals(hospital_id)
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-
 -- --------------------------------------------------
--- TABLE: blood_requests (Patient blood requirements)
+-- BLOOD REQUESTS TABLE
 -- --------------------------------------------------
 CREATE TABLE IF NOT EXISTS blood_requests (
     request_id INT AUTO_INCREMENT PRIMARY KEY,
     hospital_id INT NOT NULL,
     patient_name VARCHAR(100) NOT NULL,
-    blood_group VARCHAR(5) NOT NULL,
-    units INT NOT NULL,
-    request_type VARCHAR(20) NOT NULL, -- Emergency / Normal
-    status VARCHAR(20) DEFAULT 'Waiting',
+    blood_group VARCHAR(10) NOT NULL,
+    units_needed INT NOT NULL,
     request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
     FOREIGN KEY (hospital_id) REFERENCES hospitals(hospital_id)
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
+-- --------------------------------------------------
+-- INSERT DEFAULT BLOOD STOCK
+-- --------------------------------------------------
+INSERT INTO blood_stock (blood_group, units)
+VALUES
+('A+', 0), ('A-', 0),
+('B+', 0), ('B-', 0),
+('O+', 0), ('O-', 0),
+('AB+', 0), ('AB-', 0)
+ON DUPLICATE KEY UPDATE units = units;
 
