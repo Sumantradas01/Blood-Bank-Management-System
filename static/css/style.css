@@ -16,9 +16,11 @@
 }
 
 .logo {
-    color: white;
-    font-size: 26px;
+    font-family: "Noto Serif Bengali", "Kalpurush", sans-serif;
+    font-size: 32px;
     font-weight: bold;
+    color: white;
+    letter-spacing: 2px;
 }
 
 .nav-links {
