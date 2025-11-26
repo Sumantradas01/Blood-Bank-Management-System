@@ -14,24 +14,28 @@
     <h2>Blood Stock Overview</h2>
 
     <table>
+        <thead>
         <tr>
             <th>Blood Group</th>
             <th>Units</th>
             <th>Update</th>
         </tr>
+        </thead>
 
+        <tbody>
         {% for stock in blood_stock %}
         <tr>
             <td>{{ stock.blood_group }}</td>
             <td>{{ stock.units }}</td>
             <td>
-                <form method="POST" action="/update_stock/{{ stock.stock_id }}">
+                <form method="POST" action="{{ url_for('update_stock', stock_id=stock.stock_id) }}">
                     <input type="number" name="units" min="0" required>
                     <button type="submit">Update</button>
                 </form>
             </td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
 </section>
 
@@ -40,6 +44,7 @@
     <h2>Hospital Blood Orders</h2>
 
     <table>
+        <thead>
         <tr>
             <th>Hospital</th>
             <th>Blood Group</th>
@@ -47,20 +52,23 @@
             <th>Status</th>
             <th>Actions</th>
         </tr>
+        </thead>
 
+        <tbody>
         {% for order in orders %}
         <tr>
-            <td>{{ order.hospital_name }}</td>
+            <td>{{ order.hospital_name or 'Unknown' }}</td>
             <td>{{ order.blood_group }}</td>
             <td>{{ order.units_requested }}</td>
             <td>{{ order.status }}</td>
             <td>
-                <a href="/update_order/{{ order.order_id }}/approve">Approve</a> |
-                <a href="/update_order/{{ order.order_id }}/reject">Reject</a> |
-                <a href="/update_order/{{ order.order_id }}/complete">Complete</a>
+                <a href="{{ url_for('update_order', order_id=order.order_id, action='approve') }}">Approve</a> |
+                <a href="{{ url_for('update_order', order_id=order.order_id, action='reject') }}">Reject</a> |
+                <a href="{{ url_for('update_order', order_id=order.order_id, action='complete') }}">Complete</a>
             </td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
 </section>
 
@@ -69,6 +77,7 @@
     <h2>Hospital Requirements (Blood Requests)</h2>
 
     <table>
+        <thead>
         <tr>
             <th>Hospital</th>
             <th>Patient</th>
@@ -77,10 +86,12 @@
             <th>Type</th>
             <th>Status</th>
         </tr>
+        </thead>
 
+        <tbody>
         {% for req in requirements %}
         <tr>
-            <td>{{ req.hospital_name }}</td>
+            <td>{{ req.hospital_name or 'Unknown' }}</td>
             <td>{{ req.patient_name }}</td>
             <td>{{ req.blood_group }}</td>
             <td>{{ req.units }}</td>
@@ -88,6 +99,7 @@
             <td>{{ req.status }}</td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
 </section>
 
@@ -96,21 +108,28 @@
     <h2>Donor Management</h2>
 
     <table>
+        <thead>
         <tr>
             <th>Name</th>
             <th>Email</th>
             <th>Blood Group</th>
             <th>Action</th>
         </tr>
+        </thead>
 
+        <tbody>
         {% for donor in donors %}
         <tr>
             <td>{{ donor.name }}</td>
             <td>{{ donor.email }}</td>
             <td>{{ donor.blood_group }}</td>
-            <td><a class="delete" href="/delete_donor/{{ donor.donor_id }}">Delete</a></td>
+            <td>
+                <a class="delete" href="{{ url_for('delete_donor', donor_id=donor.donor_id) }}"
+                   onclick="return confirm('Delete donor {{ donor.name }} ?');">Delete</a>
+            </td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
 </section>
 

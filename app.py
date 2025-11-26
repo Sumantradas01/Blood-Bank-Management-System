@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 import mysql.connector
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"
+app.secret_key = "your_secret_key"  # change in production
 
 # ------------------------------------
 # DATABASE CONNECTION
@@ -76,11 +76,10 @@ def donor_login():
             user = cursor.fetchone()
 
             if user:
-                # example: set session for donor (optional)
                 session["donor_id"] = user.get("donor_id")
                 session["donor_name"] = user.get("name")
                 flash("Login successful.")
-                return redirect(url_for("dashboard"))   # uses /dashboard route you had
+                return redirect(url_for("dashboard"))
             else:
                 flash("Invalid email or password!")
                 return redirect(url_for("donor_login"))
@@ -99,8 +98,6 @@ def donor_login():
 @app.route("/admin_register", methods=["GET", "POST"])
 def admin_register():
     if request.method == "POST":
-
-        # read names that match your HTML form (admin_register.html should use these names)
         admin_name = request.form.get("admin_name")
         email = request.form.get("email")
         phone = request.form.get("phone")
@@ -112,11 +109,11 @@ def admin_register():
             return redirect(url_for("admin_register"))
 
         try:
+            # Correct parameterized SQL matching your admin table columns
             cursor.execute("""
                 INSERT INTO admin (hospital_name, admin_name, email, phone, password)
                 VALUES (%s, %s, %s, %s, %s)
             """, (hospital_name, admin_name, email, phone, password))
-
             db.commit()
             flash("Admin Registered Successfully!")
             return redirect(url_for("admin_login"))
@@ -136,8 +133,7 @@ def admin_register():
 @app.route("/admin_login", methods=["GET", "POST"])
 def admin_login():
     if request.method == "POST":
-
-        # HTML might use name="username" — accept both for safety
+        # Accept admin_name (preferred) or username if your HTML uses that
         admin_name = request.form.get("admin_name") or request.form.get("username")
         password = request.form.get("password")
 
@@ -152,9 +148,7 @@ def admin_login():
             """, (admin_name, password))
 
             data = cursor.fetchone()
-
             if data:
-                # set session so admin stays logged in
                 session["admin_id"] = data.get("admin_id")
                 session["admin_name"] = data.get("admin_name")
                 flash("Login Successful!")
@@ -187,7 +181,9 @@ def hospital_login():
     return render_template("hospital_login.html")
 
 
-# simple public dashboard used earlier
+# ------------------------------------
+# Simple public dashboard
+# ------------------------------------
 @app.route("/dashboard")
 def dashboard():
     return render_template("dashboard.html")
@@ -198,13 +194,10 @@ def dashboard():
 # ----------------------------------------
 @app.route("/admin_dashboard")
 def admin_dashboard():
-
     try:
-        # Get Total Blood Stock
         cursor.execute("SELECT * FROM blood_stock")
         blood_stock = cursor.fetchall()
 
-        # Get All Hospital Orders
         cursor.execute("""
             SELECT bo.*, h.hospital_name 
             FROM blood_orders bo
@@ -213,7 +206,6 @@ def admin_dashboard():
         """)
         orders = cursor.fetchall()
 
-        # Get Blood Requests (Emergency / Normal)
         cursor.execute("""
             SELECT br.*, h.hospital_name 
             FROM blood_requests br
@@ -222,7 +214,6 @@ def admin_dashboard():
         """)
         requirements = cursor.fetchall()
 
-        # Get All Donors
         cursor.execute("SELECT * FROM donors ORDER BY donor_id DESC")
         donors = cursor.fetchall()
 
@@ -237,7 +228,6 @@ def admin_dashboard():
     except Exception as e:
         app.logger.error("DB error (admin_dashboard): %s", e)
         flash("Database error: " + str(e))
-        # render dashboard template with empty lists to avoid template errors
         return render_template(
             "admin_dashboard.html",
             blood_stock=[], orders=[], requirements=[], donors=[]
