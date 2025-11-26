@@ -5,57 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blood Bank Management System</title>
 
-    <!-- Link external CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
 
-    <!-- Header Section -->
-    <header>
-        <div class="logo">🩸 Blood Bank</div>
-        <nav>
-            <a href="{{ url_for('home') }}">Home</a>
-            <a href="{{ url_for('donor_login') }}">Donor Login</a>
-            <a href="{{ url_for('donor_register') }}">Donor Register</a>
-            <a href="{{ url_for('search_blood') }}">Find Blood</a>
-            <a href="{{ url_for('hospital_login') }}">Hospital</a>
-            <a href="{{ url_for('admin_login') }}">Admin</a>
-        </nav>
-    </header>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">BloodBank+</div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Save Lives, Donate Blood</h1>
-        <p>Join our mission to ensure safe blood for everyone in need.</p>
-        <a class="btn" href="{{ url_for('donor_register') }}">Become a Donor</a>
-    </section>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="{{ url_for('donor_register') }}">Donor</a></li>
+            <li><a href="{{ url_for('admin_login') }}">Admin</a></li>
+            <li><a href="{{ url_for('search_blood') }}">Search Blood</a></li>
+        </ul>
+    </nav>
 
-    <!-- Info Section -->
-    <section class="info">
-        <div class="card">
-            <h2>Find Blood</h2>
-            <p>Search for available blood groups in nearby banks.</p>
-            <a href="{{ url_for('search_blood') }}">Search Now →</a>
-        </div>
+    <!-- HERO SECTION WITH IMAGE -->
+    <section id="home" class="hero">
+        <div class="hero-overlay">
 
-        <div class="card">
-            <h2>Donor Login</h2>
-            <p>Check donation history, update details and contribute.</p>
-            <a href="{{ url_for('donor_login') }}">Login →</a>
-        </div>
+            <h1>Give Blood, Save Lives</h1>
+            <p>One small donation can save someone's entire world.</p>
 
-        <div class="card">
-            <h2>Hospital Portal</h2>
-            <p>Hospitals can request or check blood availability.</p>
-            <a href="{{ url_for('hospital_login') }}">Login →</a>
+            <div class="btn-group">
+                <a class="btn" href="{{ url_for('donor_register') }}">Become a Donor</a>
+                <a class="btn-outline" href="{{ url_for('search_blood') }}">Search Blood</a>
+            </div>
+
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2025 Blood Bank Management System | All Rights Reserved</p>
-    </footer>
+    <!-- SERVICES SECTION -->
+    <section class="services">
+        <h2>What We Offer</h2>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Register as Donor</h3>
+                <p>Join our mission and help save lives by donating blood.</p>
+            </div>
+
+            <div class="card">
+                <h3>Find Blood Quickly</h3>
+                <p>Search for available blood groups easily and instantly.</p>
+            </div>
+
+            <div class="card">
+                <h3>Hospital Admin Panel</h3>
+                <p>Manage blood stock and donor records with ease.</p>
+            </div>
+
+        </div>
+    </section>
 
 </body>
 </html>
