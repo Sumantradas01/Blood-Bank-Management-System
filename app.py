@@ -140,7 +140,7 @@ def hospital_login():
 def dashboard():
     return render_template("dashboard.html")
 
-@app.route('/hospital_register', methods=['GET', 'POST'])
+@app.route('/hospital_register', methods=['POST','GET'])
 def hospital_register():
     if request.method == 'POST':
         name = request.form['name']
@@ -149,10 +149,10 @@ def hospital_register():
         phone = request.form['phone']
         password = request.form['password']
 
-        cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO hospital (name, reg_no, email, phone, password) VALUES (%s, %s, %s, %s, %s)",
-                    (name, reg_no, email, phone, password))
-        mysql.connection.commit()
+        cur = db.cursor()
+        sql = "INSERT INTO hospital (name, reg_no, email, phone, password) VALUES (%s, %s, %s, %s, %s)"
+        cur.execute(sql, (name, reg_no, email, phone, password))
+        db.commit()
         cur.close()
 
         flash("Hospital registered successfully!")
